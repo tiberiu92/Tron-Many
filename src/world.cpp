@@ -1,4 +1,5 @@
 #include "world.hpp"
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -49,21 +50,23 @@ const GameWorld::Cell& GameWorld::cell(const Position& pos) const {
 
 void GameWorld::move(Move redMove, Move greenMove)
 {
+    assert(state() == GameRunningState);
+
     bool redMoveValid = moveValid(*this, RedPlayer, redMove);
     bool greenMoveValid = moveValid(*this, GreenPlayer, greenMove);
 
     if (!redMoveValid && !greenMoveValid) {
-        // TODO: Set Draw state
+        state_ = DrawState;
         return;
     }
 
     if (!redMoveValid) {
-        // TODO: Set GreenWon state
+        state_ = GreenWonState;
         return;
     }
 
     if (!greenMoveValid) {
-        // TODO: Set redWon state
+        state_ = RedWonState;
         return;
     }
 
@@ -71,7 +74,7 @@ void GameWorld::move(Move redMove, Move greenMove)
     Position newGreenPos = greenPos_ + greenMove;
 
     if (newRedPos == newGreenPos) {
-        // TODO: Set Draw state
+        state_ = DrawState;
         return;
     }
 
@@ -81,7 +84,7 @@ void GameWorld::move(Move redMove, Move greenMove)
     redPos_ = newRedPos;
     greenPos_ = newGreenPos;
 
-    // TODO:: Ensure GameRunning state is set
+    state_ = GameRunningState;
 }
 
 //void GameWorld::undo()
