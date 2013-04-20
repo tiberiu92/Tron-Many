@@ -7,6 +7,7 @@
 // ----------------------------------------------------------------------------
 
 GameWorld::GameWorld(std::istream& istream)
+    : state_(GameRunningState)
 {
     istream >> redPos_;
     istream >> greenPos_;
@@ -25,11 +26,13 @@ GameWorld::GameWorld(std::istream& istream)
 
 
 // ============================================================================
-//   Getters, Setters, Predicates
+//   Getters
 // ----------------------------------------------------------------------------
 
 std::size_t GameWorld::rows() const { return map_.size(); }
 std::size_t GameWorld::cols() const { return map_[0].size(); }
+
+GameWorld::State GameWorld::state() const { return state_; }
 
 const GameWorld::Position& GameWorld::position(Player p) const {
     return p == RedPlayer ? redPos_ : greenPos_;

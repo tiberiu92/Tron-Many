@@ -21,6 +21,10 @@ class GameWorld
         RedPlayer, GreenPlayer
     };
 
+    enum State {
+        GameRunningState, RedWonState, GreenWonState, DrawState
+    };
+
     static const Cell WallSymbol  = '#';
     static const Cell EmptySymbol = '-';
     static const Cell RedSymbol   = 'r';
@@ -31,6 +35,8 @@ class GameWorld
     std::size_t rows() const;
     std::size_t cols() const;
 
+    State state() const;
+
     const Position& position(Player p) const;
     const Cell& cell(const Position& pos) const;
 
@@ -40,6 +46,7 @@ class GameWorld
   private:
     std::vector<std::vector<Cell> > map_;
     Position redPos_, greenPos_;
+    State state_;
 };
 
 
