@@ -47,14 +47,45 @@ const GameWorld::Cell& GameWorld::cell(const Position& pos) const {
 
 void GameWorld::move(Move redMove, Move greenMove)
 {
-    assert(moveValid(*this, RedPlayer, redMove));
-    assert(moveValid(*this, GreenPlayer, greenMove));
-    // TODO: Implement
+    bool redMoveValid = moveValid(*this, RedPlayer, redMove);
+    bool greenMoveValid = moveValid(*this, GreenPlayer, greenMove);
+
+    if (!redMoveValid && !greenMoveValid) {
+        // TODO: Set Draw state
+        return;
+    }
+
+    if (!redMoveValid) {
+        // TODO: Set GreenWon state
+        return;
+    }
+
+    if (!greenMoveValid) {
+        // TODO: Set redWon state
+        return;
+    }
+
+    Position newRedPos = redPos_ + redMove;
+    Position newGreenPos = greenPos_ + greenMove;
+
+    if (newRedPos == newGreenPos) {
+        // TODO: Set Draw state
+        return;
+    }
+
+    map_[redPos_.first][redPos_.second] = GameWorld::RedSymbol;
+    map_[greenPos_.first][greenPos_.second] = GameWorld::GreenSymbol;
+
+    redPos_ = newRedPos;
+    greenPos_ = newGreenPos;
+
+    // TODO:: Ensure GameRunning state is set
 }
 
 //void GameWorld::undo()
 //{
 //}
+
 
 // ============================================================================
 //   Non-member functions
