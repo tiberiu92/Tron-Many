@@ -1,4 +1,3 @@
-#include "world.hpp"
 #include <cassert>
 #include <iostream>
 #include <vector>
@@ -63,6 +62,8 @@ GameWorld::Position operator-(const GameWorld::Position& p, GameWorld::Move m);
 
 std::istream& operator>>(std::istream& istream, GameWorld::Position& p);
 std::ostream& operator<<(std::ostream& ostream, const GameWorld::Position& p);
+
+std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m);
 
 
 // ============================================================================
@@ -184,6 +185,16 @@ std::istream& operator>>(std::istream& istream, GameWorld::Position& p)
 std::ostream& operator<<(std::ostream& ostream, const GameWorld::Position& p)
 {
     ostream << p.first << " " << p.second;
+    return ostream;
+}
+
+std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
+{
+    static const char* moves[] = {
+        "LEFT", "RIGHT", "UP", "DOWN"
+    };
+
+    ostream << moves[m];
     return ostream;
 }
 
