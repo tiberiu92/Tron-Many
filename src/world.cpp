@@ -1,5 +1,4 @@
 #include "world.hpp"
-#include <cassert>
 #include <iostream>
 #include <vector>
 
