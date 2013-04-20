@@ -3,8 +3,70 @@
 #include <iostream>
 #include <vector>
 
+
 // ============================================================================
-//   Constructors and Destructors
+//   GameWorld Declarations
+// ----------------------------------------------------------------------------
+
+class GameWorld
+{
+  public:
+    typedef char Cell;
+    typedef int Coordinate;
+    typedef std::pair<Coordinate, Coordinate> Position;
+
+    enum Move {
+        Left = 0, Right = 1, Up = 2, Down = 3,
+        MovesBegin = Left, MovesEnd = 4
+    };
+
+    enum Player {
+        RedPlayer, GreenPlayer
+    };
+
+    enum State {
+        GameRunningState, RedWonState, GreenWonState, DrawState
+    };
+
+    static const Cell WallSymbol  = '#';
+    static const Cell EmptySymbol = '-';
+    static const Cell RedSymbol   = 'r';
+    static const Cell GreenSymbol = 'g';
+
+    GameWorld(std::istream& istream);
+
+    std::size_t rows() const;
+    std::size_t cols() const;
+
+    State state() const;
+
+    const Position& position(Player p) const;
+    const Cell& cell(const Position& pos) const;
+
+    void move(Move redMove, Move greenMove);
+    // void undo();
+
+  private:
+    std::vector<std::vector<Cell> > map_;
+    Position redPos_, greenPos_;
+    State state_;
+};
+
+
+bool positionValid(const GameWorld& w, const GameWorld::Position& p);
+bool moveValid(const GameWorld& w, GameWorld::Player p, GameWorld::Move m);
+
+GameWorld::Move operator++(GameWorld::Move& m);
+
+GameWorld::Position operator+(const GameWorld::Position& p, GameWorld::Move m);
+GameWorld::Position operator-(const GameWorld::Position& p, GameWorld::Move m);
+
+std::istream& operator>>(std::istream& istream, GameWorld::Position& p);
+std::ostream& operator<<(std::ostream& ostream, const GameWorld::Position& p);
+
+
+// ============================================================================
+//   GameWorld Definitions
 // ----------------------------------------------------------------------------
 
 GameWorld::GameWorld(std::istream& istream)
@@ -25,11 +87,6 @@ GameWorld::GameWorld(std::istream& istream)
     }
 }
 
-
-// ============================================================================
-//   Getters
-// ----------------------------------------------------------------------------
-
 std::size_t GameWorld::rows() const { return map_.size(); }
 std::size_t GameWorld::cols() const { return map_[0].size(); }
 
@@ -42,11 +99,6 @@ const GameWorld::Position& GameWorld::position(Player p) const {
 const GameWorld::Cell& GameWorld::cell(const Position& pos) const {
     return map_[pos.first][pos.second];
 }
-
-
-// ============================================================================
-//   Move and Undo
-// ----------------------------------------------------------------------------
 
 void GameWorld::move(Move redMove, Move greenMove)
 {
@@ -91,11 +143,6 @@ void GameWorld::move(Move redMove, Move greenMove)
 //{
 //}
 
-
-// ============================================================================
-//   Non-member functions
-// ----------------------------------------------------------------------------
-
 bool positionValid(const GameWorld& w, const GameWorld::Position& p)
 {
     return 0 <= p.first && static_cast<std::size_t>(p.first) < w.rows()
@@ -107,11 +154,6 @@ bool moveValid(const GameWorld& w, GameWorld::Player p, GameWorld::Move m)
     GameWorld::Position pos = w.position(p) + m;
     return positionValid(w, pos) && w.cell(pos) == GameWorld::EmptySymbol;
 }
-
-
-// ============================================================================
-//   Non-member operators
-// ----------------------------------------------------------------------------
 
 GameWorld::Move operator++(GameWorld::Move& m)
 {
@@ -143,4 +185,14 @@ std::ostream& operator<<(std::ostream& ostream, const GameWorld::Position& p)
 {
     ostream << p.first << " " << p.second;
     return ostream;
+}
+
+
+// ============================================================================
+//   Main
+// ----------------------------------------------------------------------------
+
+int main()
+{
+    return 0;
 }
