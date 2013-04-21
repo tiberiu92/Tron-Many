@@ -225,6 +225,29 @@ std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
 //   Main
 // ----------------------------------------------------------------------------
 
+bool isDeadEnd(const GameWorld& w, GameWorld::Position p, GameWorld::Move m)
+{
+    while (w.moveValid(p, m))
+    {
+        p = p + m;
+        int numNeighbours = 0;
+
+        for (GameWorld::Move n = GameWorld::MovesBegin;
+             n != GameWorld::MovesEnd; ++n)
+        {
+            if (w.moveValid(p, n)) {
+                ++numNeighbours;
+            }
+        }
+
+        if (numNeighbours > 1) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 int main()
 {
     GameWorld::Player player;
@@ -242,6 +265,12 @@ int main()
         GameWorld::Position pos = playerPos;
         std::size_t len = 0;
 
+        if (isDeadEnd(world, pos, m)) {
+            std::cerr << m << " is a dead end!\n";
+            pathLengths[m] = 0;
+            continue;
+        }
+
         while (world.moveValid(pos, m)) {
             ++len;
             pos = pos + m;
@@ -250,23 +279,23 @@ int main()
         pathLengths[m] = len;
     }
 
-    if (world.moveValid(playerPos, GameWorld::Up)
-        && pathLengths[GameWorld::Up] >= pathLengths[GameWorld::Down])
-    {
-        move = GameWorld::Up;
-    }
-    else if (world.moveValid(playerPos, GameWorld::Down))
-    {
-        move = GameWorld::Down;
-    }
-    else if (world.moveValid(playerPos, GameWorld::Left)
+    if (world.moveValid(playerPos, GameWorld::Left)
         && pathLengths[GameWorld::Left] >= pathLengths[GameWorld::Right])
     {
         move = GameWorld::Left;
     }
-    else
+    else if (world.moveValid(playerPos, GameWorld::Right))
     {
         move = GameWorld::Right;
+    }
+    else if (world.moveValid(playerPos, GameWorld::Up)
+        && pathLengths[GameWorld::Up] >= pathLengths[GameWorld::Down])
+    {
+        move = GameWorld::Up;
+    }
+    else
+    {
+        move = GameWorld::Down;
     }
 
     std::cout << move << "\n";
