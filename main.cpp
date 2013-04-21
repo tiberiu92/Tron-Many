@@ -1,4 +1,3 @@
-#include "world.hpp"
 #include <cassert>
 #include <iostream>
 #include <vector>
@@ -54,7 +53,7 @@ class GameWorld
 
 
 bool positionValid(const GameWorld& w, const GameWorld::Position& p);
-bool moveValid(const GameWorld& w, GameWorld::Player p, GameWorld::Move m);
+bool moveValid(const GameWorld& w, GameWorld::Position p, GameWorld::Move m);
 
 GameWorld::Move operator++(GameWorld::Move& m);
 
@@ -63,6 +62,8 @@ GameWorld::Position operator-(const GameWorld::Position& p, GameWorld::Move m);
 
 std::istream& operator>>(std::istream& istream, GameWorld::Position& p);
 std::ostream& operator<<(std::ostream& ostream, const GameWorld::Position& p);
+
+std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m);
 
 
 // ============================================================================
@@ -104,8 +105,8 @@ void GameWorld::move(Move redMove, Move greenMove)
 {
     assert(state() == GameRunningState);
 
-    bool redMoveValid = moveValid(*this, RedPlayer, redMove);
-    bool greenMoveValid = moveValid(*this, GreenPlayer, greenMove);
+    bool redMoveValid = moveValid(*this, redPos_, redMove);
+    bool greenMoveValid = moveValid(*this, greenPos_, greenMove);
 
     if (!redMoveValid && !greenMoveValid) {
         state_ = DrawState;
@@ -149,9 +150,9 @@ bool positionValid(const GameWorld& w, const GameWorld::Position& p)
         && 0 <= p.second && static_cast<std::size_t>(p.second) < w.cols();
 }
 
-bool moveValid(const GameWorld& w, GameWorld::Player p, GameWorld::Move m)
+bool moveValid(const GameWorld& w, GameWorld::Position p, GameWorld::Move m)
 {
-    GameWorld::Position pos = w.position(p) + m;
+    GameWorld::Position pos = p + m;
     return positionValid(w, pos) && w.cell(pos) == GameWorld::EmptySymbol;
 }
 
@@ -187,6 +188,16 @@ std::ostream& operator<<(std::ostream& ostream, const GameWorld::Position& p)
     return ostream;
 }
 
+std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
+{
+    static const char* moves[] = {
+        "LEFT", "RIGHT", "UP", "DOWN"
+    };
+
+    ostream << moves[m];
+    return ostream;
+}
+
 
 // ============================================================================
 //   Main
@@ -194,5 +205,39 @@ std::ostream& operator<<(std::ostream& ostream, const GameWorld::Position& p)
 
 int main()
 {
+    char playerSymbol;
+    GameWorld::Player player;
+
+    std::cin >> playerSymbol;
+    GameWorld world(std::cin);
+
+    player = playerSymbol == GameWorld::RedSymbol ?
+        GameWorld::RedPlayer : GameWorld::GreenPlayer;
+
+    GameWorld::Move bestMove;
+    std::size_t bestLen = 0;
+
+    for (GameWorld::Move move = GameWorld::MovesBegin;
+         move != GameWorld::MovesEnd; ++move)
+    {
+        GameWorld::Position pos = world.position(player);
+        std::size_t len = 0;
+
+        while (moveValid(world, pos, move)) {
+            ++len;
+            pos = pos + move;
+        }
+
+        if (len > bestLen) {
+            bestMove = move;
+            bestLen = len;
+        }
+    }
+
+    std::cerr << "Best move: " << bestMove << "\n";
+    std::cerr << "Best length: " << bestLen << "\n";
+
+    std::cout << bestMove << "\n";
+
     return 0;
 }
