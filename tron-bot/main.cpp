@@ -207,11 +207,11 @@ std::istream& operator>>(std::istream& istream, GameWorld::Player& p)
 {
     char symbol;
     istream >> symbol;
-    
+
     if (symbol == GameWorld::RedSymbol) p = GameWorld::RedPlayer;
     else if (symbol == GameWorld::GreenSymbol) p = GameWorld::GreenPlayer;
-    
-    return istream;    
+
+    return istream;
 }
 
 std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
@@ -225,7 +225,79 @@ std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
 //   Main
 // ----------------------------------------------------------------------------
 
+int numNeighbours(const GameWorld& world, const GameWorld::Position& pos)
+{
+    int count = 0;
+
+    for (GameWorld::Move move = GameWorld::MovesBegin;
+         move != GameWorld::MovesEnd; ++move)
+    {
+        if (world.moveValid(pos, move))
+            ++count;
+    }
+
+    return count;
+}
+
+bool isDeadEnd(const GameWorld& world,
+    GameWorld::Position pos, GameWorld::Move move)
+{
+    while (world.moveValid(pos, move)) {
+        pos = pos + move;
+        if (numNeighbours(world, pos) > 1) return false;
+    }
+    return true;
+}
+
+bool isAlongObstacle(const GameWorld& world,
+    GameWorld::Position pos, GameWorld::Move move)
+{
+    GameWorld::Position first = pos + move;
+    GameWorld::Position second = first + move;
+
+    if (!world.positionValid(first) || !world.positionValid(second))
+        return false;
+
+    for (GameWorld::Move m = GameWorld::MovesBegin;
+        m != GameWorld::MovesEnd; ++m)
+    {
+        if (m == move || second + m == first)
+            continue;
+
+        GameWorld::Cell a = world.cell(first + m);
+        GameWorld::Cell b = world.cell(second + m);
+
+        if (a != GameWorld::EmptySymbol && b != GameWorld::EmptySymbol)
+            return true;
+    }
+
+    return false;
+}
+
 int main()
 {
+    GameWorld::Player player;
+    GameWorld::Move move = GameWorld::Left;
+
+    std::cin >> player;
+    GameWorld world(std::cin);
+
+    for (GameWorld::Move m = GameWorld::MovesBegin;
+         m != GameWorld::MovesEnd; ++m)
+    {
+        GameWorld::Position pos = world.position(player);
+
+        bool valid = world.moveValid(pos, m);
+        bool alongObstacle = isAlongObstacle(world, pos, m);
+        bool deadEnd = isDeadEnd(world, pos, m);
+
+        if (valid && alongObstacle && !deadEnd) {
+            move = m;
+            break;
+        }
+    }
+
+    std::cout << move << "\n";
+
     return 0;
 }
