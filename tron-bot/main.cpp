@@ -66,7 +66,7 @@ std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m);
 
 
 // ============================================================================
-//   GameWorld Definitions
+//   GameWorld Constructor
 // ----------------------------------------------------------------------------
 
 GameWorld::GameWorld(std::istream& istream)
@@ -87,6 +87,11 @@ GameWorld::GameWorld(std::istream& istream)
     }
 }
 
+
+// ============================================================================
+//   GameWorld Getters
+// ----------------------------------------------------------------------------
+
 std::size_t GameWorld::rows() const { return map_.size(); }
 std::size_t GameWorld::cols() const { return map_[0].size(); }
 
@@ -99,6 +104,11 @@ const GameWorld::Position& GameWorld::position(Player p) const {
 const GameWorld::Cell& GameWorld::cell(const Position& pos) const {
     return map_[pos.first][pos.second];
 }
+
+
+// ============================================================================
+//   GameWorld Predicates
+// ----------------------------------------------------------------------------
 
 bool GameWorld::positionValid(const Position& p) const
 {
@@ -114,6 +124,11 @@ bool GameWorld::moveValid(const Position& p, Move m) const
     Position pos = p + m;
     return positionValid(pos) && cell(pos) == EmptySymbol;
 }
+
+
+// ============================================================================
+//   GameWorld Move and Undo
+// ----------------------------------------------------------------------------
 
 void GameWorld::move(Move redMove, Move greenMove)
 {
@@ -157,6 +172,11 @@ void GameWorld::move(Move redMove, Move greenMove)
 //void GameWorld::undo()
 //{
 //}
+
+
+// ============================================================================
+//   GameWorld Non-member Operators
+// ----------------------------------------------------------------------------
 
 GameWorld::Move operator++(GameWorld::Move& m)
 {
