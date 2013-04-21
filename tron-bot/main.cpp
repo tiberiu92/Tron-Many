@@ -207,11 +207,11 @@ std::istream& operator>>(std::istream& istream, GameWorld::Player& p)
 {
     char symbol;
     istream >> symbol;
-    
+
     if (symbol == GameWorld::RedSymbol) p = GameWorld::RedPlayer;
     else if (symbol == GameWorld::GreenSymbol) p = GameWorld::GreenPlayer;
-    
-    return istream;    
+
+    return istream;
 }
 
 std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
@@ -227,5 +227,49 @@ std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
 
 int main()
 {
+    GameWorld::Player player;
+    GameWorld::Move move;
+
+    std::cin >> player;
+    GameWorld world(std::cin);
+
+    std::size_t pathLengths[4];
+    GameWorld::Position playerPos = world.position(player);
+
+    for (GameWorld::Move m = GameWorld::MovesBegin;
+         m != GameWorld::MovesEnd; ++m)
+    {
+        GameWorld::Position pos = playerPos;
+        std::size_t len = 0;
+
+        while (world.moveValid(pos, m)) {
+            ++len;
+            pos = pos + m;
+        }
+
+        pathLengths[m] = len;
+    }
+
+    if (world.moveValid(playerPos, GameWorld::Up)
+        && pathLengths[GameWorld::Up] >= pathLengths[GameWorld::Down])
+    {
+        move = GameWorld::Up;
+    }
+    else if (world.moveValid(playerPos, GameWorld::Down))
+    {
+        move = GameWorld::Down;
+    }
+    else if (world.moveValid(playerPos, GameWorld::Left)
+        && pathLengths[GameWorld::Left] >= pathLengths[GameWorld::Right])
+    {
+        move = GameWorld::Left;
+    }
+    else
+    {
+        move = GameWorld::Right;
+    }
+
+    std::cout << move << "\n";
+
     return 0;
 }
