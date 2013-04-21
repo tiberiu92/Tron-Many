@@ -42,6 +42,9 @@ class GameWorld
     const Position& position(Player p) const;
     const Cell& cell(const Position& pos) const;
 
+    bool positionValid(const Position& p) const;
+    bool moveValid(const Position& p, Move m) const;
+
     void move(Move redMove, Move greenMove);
     // void undo();
 
@@ -50,10 +53,6 @@ class GameWorld
     Position redPos_, greenPos_;
     State state_;
 };
-
-
-bool positionValid(const GameWorld& w, const GameWorld::Position& p);
-bool moveValid(const GameWorld& w, GameWorld::Player p, GameWorld::Move m);
 
 GameWorld::Move operator++(GameWorld::Move& m);
 
@@ -101,12 +100,27 @@ const GameWorld::Cell& GameWorld::cell(const Position& pos) const {
     return map_[pos.first][pos.second];
 }
 
+bool GameWorld::positionValid(const Position& p) const
+{
+    return 0 <= p.first && static_cast<std::size_t>(p.first) < rows()
+        && 0 <= p.second && static_cast<std::size_t>(p.second) < cols();
+}
+
+bool GameWorld::moveValid(const Position& p, Move m) const
+{
+    if (!positionValid(p))
+        return false;
+
+    Position pos = p + m;
+    return positionValid(pos) && cell(pos) == EmptySymbol;
+}
+
 void GameWorld::move(Move redMove, Move greenMove)
 {
     assert(state() == GameRunningState);
 
-    bool redMoveValid = moveValid(*this, RedPlayer, redMove);
-    bool greenMoveValid = moveValid(*this, GreenPlayer, greenMove);
+    bool redMoveValid = moveValid(redPos_, redMove);
+    bool greenMoveValid = moveValid(greenPos_, greenMove);
 
     if (!redMoveValid && !greenMoveValid) {
         state_ = DrawState;
@@ -143,18 +157,6 @@ void GameWorld::move(Move redMove, Move greenMove)
 //void GameWorld::undo()
 //{
 //}
-
-bool positionValid(const GameWorld& w, const GameWorld::Position& p)
-{
-    return 0 <= p.first && static_cast<std::size_t>(p.first) < w.rows()
-        && 0 <= p.second && static_cast<std::size_t>(p.second) < w.cols();
-}
-
-bool moveValid(const GameWorld& w, GameWorld::Player p, GameWorld::Move m)
-{
-    GameWorld::Position pos = w.position(p) + m;
-    return positionValid(w, pos) && w.cell(pos) == GameWorld::EmptySymbol;
-}
 
 GameWorld::Move operator++(GameWorld::Move& m)
 {
