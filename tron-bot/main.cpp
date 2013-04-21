@@ -60,6 +60,7 @@ GameWorld::Position operator+(const GameWorld::Position& p, GameWorld::Move m);
 GameWorld::Position operator-(const GameWorld::Position& p, GameWorld::Move m);
 
 std::istream& operator>>(std::istream& istream, GameWorld::Position& p);
+std::istream& operator>>(std::istream& istream, GameWorld::Player& p);
 std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m);
 
 
@@ -200,6 +201,17 @@ std::istream& operator>>(std::istream& istream, GameWorld::Position& p)
 {
     istream >> p.first >> p.second;
     return istream;
+}
+
+std::istream& operator>>(std::istream& istream, GameWorld::Player& p)
+{
+    char symbol;
+    istream >> symbol;
+    
+    if (symbol == GameWorld::RedSymbol) p = GameWorld::RedPlayer;
+    else if (symbol == GameWorld::GreenSymbol) p = GameWorld::GreenPlayer;
+    
+    return istream;    
 }
 
 std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
