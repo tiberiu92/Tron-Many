@@ -277,27 +277,37 @@ bool isAlongObstacle(const GameWorld& world,
 int main()
 {
     GameWorld::Player player;
-    GameWorld::Move move = GameWorld::Left;
+    GameWorld::Move bestMove = GameWorld::Left;
+    int bestScore = 0;
 
     std::cin >> player;
     GameWorld world(std::cin);
 
-    for (GameWorld::Move m = GameWorld::MovesBegin;
-         m != GameWorld::MovesEnd; ++m)
+    for (GameWorld::Move move = GameWorld::MovesBegin;
+         move != GameWorld::MovesEnd; ++move)
     {
         GameWorld::Position pos = world.position(player);
+        int score = 0;
 
-        bool valid = world.moveValid(pos, m);
-        bool alongObstacle = isAlongObstacle(world, pos, m);
-        bool deadEnd = isDeadEnd(world, pos, m);
+        if (!world.moveValid(pos, move))
+            continue;
 
-        if (valid && alongObstacle && !deadEnd) {
-            move = m;
-            break;
+        bool alongObstacle = isAlongObstacle(world, pos, move);
+        bool deadEnd = isDeadEnd(world, pos, move);
+
+        std::cerr << move << ": " << (deadEnd ? "Dead end; " : "");
+        std::cerr << (alongObstacle ? "Along obstacle" : "") << "\n";
+
+        score += alongObstacle ? 1 : 0;
+        score += deadEnd ? 1 : 10;
+
+        if (score > bestScore) {
+            bestScore = score;
+            bestMove = move;
         }
     }
 
-    std::cout << move << "\n";
+    std::cout << bestMove << "\n";
 
     return 0;
 }
