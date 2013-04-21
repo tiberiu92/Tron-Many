@@ -204,12 +204,8 @@ std::istream& operator>>(std::istream& istream, GameWorld::Position& p)
 
 std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
 {
-    static const char* moves[] = {
-        "LEFT", "RIGHT", "UP", "DOWN"
-    };
-
-    ostream << moves[m];
-    return ostream;
+    static const char* moves[] = { "LEFT", "RIGHT", "UP", "DOWN" };
+    return ostream << moves[m];
 }
 
 
