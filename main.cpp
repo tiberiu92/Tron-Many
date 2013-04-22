@@ -234,9 +234,6 @@ int main()
         }
     }
 
-    std::cerr << "Best move: " << bestMove << "\n";
-    std::cerr << "Best length: " << bestLen << "\n";
-
     std::cout << bestMove << "\n";
 
     return 0;
