@@ -194,6 +194,8 @@ void GameWorld::undo()
 
     redPos_ = redPos_ - top.first;
     greenPos_ = greenPos_ - top.second;
+
+    state_ = GameRunningState;
 }
 
 
