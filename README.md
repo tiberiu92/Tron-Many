@@ -16,7 +16,7 @@ la un moment dat. Am cazut de comun acord sa abordam o solutie cat mai
 simpla posibila in aceasta prima etapa pentru a ne putea incadra in timp.
 
 Insa codul pe care l-am scris este facut in asa fel incat sa poata fi extins
-si facut mai complex in etapele urmatoare. Spre exemplu clasa `GameWorld`,
+si facut mai complex in etapele urmatoare; spre exemplu, clasa `GameWorld`,
 pe care am facut-o in asa fel incat sa ne fie mai usor in viitor sa
 implementam un algoritm de tip minimax.
 
