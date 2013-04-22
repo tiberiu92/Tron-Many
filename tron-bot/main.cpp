@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <stack>
 #include <vector>
 
 
@@ -48,10 +49,11 @@ class GameWorld
     bool moveValid(const Position& p, Move m) const;
 
     void move(Move redMove, Move greenMove);
-    // void undo();
+    void undo();
 
   private:
     std::vector<std::vector<Cell> > map_;
+    std::stack<std::pair<Move, Move> > history_;
     Position redPos_, greenPos_;
     State state_;
 };
@@ -167,12 +169,22 @@ void GameWorld::move(Move redMove, Move greenMove)
     redPos_ = newRedPos;
     greenPos_ = newGreenPos;
 
-    state_ = GameRunningState;
+    history_.push(std::make_pair(redMove, greenMove));
 }
 
-//void GameWorld::undo()
-//{
-//}
+void GameWorld::undo()
+{
+    assert(!history_.empty());
+
+    std::pair<Move, Move> top = history_.top();
+    history_.pop();
+
+    map_[redPos_.first][redPos_.second] = EmptySymbol;
+    map_[greenPos_.first][greenPos_.second] = EmptySymbol;
+
+    redPos_ = redPos_ - top.first;
+    greenPos_ = greenPos_ - top.second;
+}
 
 
 // ============================================================================
