@@ -36,6 +36,7 @@ class GameWorld
     static const Cell GreenSymbol = 'g';
 
     GameWorld(std::istream& istream);
+    ~GameWorld();
 
     std::size_t rows() const;
     std::size_t cols() const;
@@ -88,6 +89,15 @@ GameWorld::GameWorld(std::istream& istream)
             istream >> map_[r][c];
         }
     }
+}
+
+GameWorld::~GameWorld()
+{
+    // The destructor is not necessary, but g++ will warn that
+    //   > inlining failed in call to 'GameWorld::~GameWorld()': call
+    //   > is unlikely and code size would grow [-Winline]
+    // Including this explicit empty definition of the destructor
+    // prevents the warning.
 }
 
 
