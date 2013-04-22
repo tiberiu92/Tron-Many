@@ -10,6 +10,8 @@ Scarlat Tiberiu (323CB), Velea Cosmin (323CB)
 
 ###Etapa I###
 
+Tag: `stage-i-submission`
+
 Pentru etapa I am implementat un AI foarte rudimentar: tot ce face este sa
 se duca tot timpul in directia celui mai lung coridor pe care il poate vedea
 la un moment dat. Am cazut de comun acord sa abordam o solutie cat mai
