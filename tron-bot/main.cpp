@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <vector>
 
@@ -224,6 +226,50 @@ std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
 // ============================================================================
 //   Main
 // ----------------------------------------------------------------------------
+
+void getProximalArea(const GameWorld& world, const GameWorld::Position& pos,
+    int depth, std::vector<GameWorld::Position>& area)
+{
+    if (depth == 0)
+        return;
+
+    if (std::find(area.begin(), area.end(), pos) != area.end())
+        return;
+
+    area.push_back(pos);
+
+    for (GameWorld::Move move = GameWorld::MovesBegin;
+         move != GameWorld::MovesEnd; ++move)
+    {
+        if (!world.moveValid(pos, move))
+            continue;
+
+        GameWorld::Position pos2 = pos + move;
+        getProximalArea(world, pos2, depth - 1, area);
+    }
+}
+
+double getAreaSpread(const std::vector<GameWorld::Position>& area,
+    GameWorld::Coordinate GameWorld::Position::*coord)
+{
+    double deviation = 0.0, average = 0.0;
+    std::vector<GameWorld::Position>::const_iterator cell;
+
+    for (cell = area.begin(); cell != area.end(); ++cell) {
+        average += (*cell).*coord;
+    }
+
+    average /= area.size();
+
+    for (cell = area.begin(); cell != area.end(); ++cell) {
+        double temp = (*cell).*coord - average;
+        deviation += temp * temp;
+    }
+
+    deviation = std::sqrt(deviation / area.size());
+
+    return deviation;
+}
 
 int numNeighbours(const GameWorld& world, const GameWorld::Position& pos)
 {
