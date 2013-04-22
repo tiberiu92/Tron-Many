@@ -13,7 +13,7 @@ Pentru etapa I am implementat un AI foarte rudimentar: tot ce face este sa
 se duca tot timpul in directia celui mai lung coridor pe care il poate vedea
 la un moment dat.
 
-**Soltie:** [hackerrank.com/.../submissions/game/624187][2]  
+**Solutie:** [hackerrank.com/.../submissions/game/624187][2]  
 **Meci RandomBot:** [hackerrank.com/showgame/2134056][3]  
 **Meci explorer:** [hackerrank.com/showgame/2134107][4]  
 
