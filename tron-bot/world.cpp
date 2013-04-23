@@ -1,5 +1,6 @@
 #include "world.hpp"
 #include <cassert>
+#include <stack>
 #include <iostream>
 #include <vector>
 
@@ -105,12 +106,24 @@ void GameWorld::move(Move redMove, Move greenMove)
     redPos_ = newRedPos;
     greenPos_ = newGreenPos;
 
-    state_ = GameRunningState;
+    history_.push(std::make_pair(redMove, greenMove));
 }
 
-//void GameWorld::undo()
-//{
-//}
+void GameWorld::undo()
+{
+    assert(!history_.empty());
+
+    std::pair<Move, Move> top = history_.top();
+    history_.pop();
+
+    map_[redPos_.first][redPos_.second] = EmptySymbol;
+    map_[greenPos_.first][greenPos_.second] = EmptySymbol;
+
+    redPos_ = redPos_ - top.first;
+    greenPos_ = greenPos_ - top.second;
+
+    state_ = GameRunningState;
+}
 
 
 // ============================================================================

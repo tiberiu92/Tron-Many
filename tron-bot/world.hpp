@@ -2,6 +2,7 @@
 #define TRON_MANY_WORLD_HPP
 
 #include <iostream>
+#include <stack>
 #include <utility>
 #include <vector>
 
@@ -44,10 +45,11 @@ class GameWorld
     bool moveValid(const Position& p, Move m) const;
 
     void move(Move redMove, Move greenMove);
-    // void undo();
+    void undo();
 
   private:
     std::vector<std::vector<Cell> > map_;
+    std::stack<std::pair<Move, Move> > history_;
     Position redPos_, greenPos_;
     State state_;
 };
