@@ -15,7 +15,7 @@ Tag: `stage-i-submission`
 Pentru etapa I am implementat un AI foarte rudimentar: tot ce face este sa
 se duca tot timpul in directia celui mai lung coridor pe care il poate vedea
 la un moment dat. Am cazut de comun acord sa abordam o solutie cat mai
-simpla posibila in aceasta prima etapa pentru a ne putea incadra in timp.
+simpla posibil in aceasta prima etapa pentru a ne putea incadra in timp.
 
 Insa codul pe care l-am scris este facut in asa fel incat sa poata fi extins
 si facut mai complex in etapele urmatoare; spre exemplu, clasa `GameWorld`,
