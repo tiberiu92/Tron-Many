@@ -44,7 +44,7 @@ class GameWorld
     bool positionValid(const Position& p) const;
     bool moveValid(const Position& p, Move m) const;
 
-    void move(Move redMove, Move greenMove);
+    void move(Player p1, Move m1, Player p2, Move m2);
     void undo();
 
   private:
