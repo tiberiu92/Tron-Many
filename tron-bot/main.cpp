@@ -109,7 +109,7 @@ int negaMax (GameWorld& world, GameWorld::Player player, int depth, GameWorld::M
     GameWorld::State state = world.state();
 
     if (depth == 0) {
-        return evalMove(world, player, 15);
+        return evalMove(world, player, 9);
     }
     int max = -INF;
     int score;
@@ -136,7 +136,7 @@ int negaMax (GameWorld& world, GameWorld::Player player, int depth, GameWorld::M
         }
     }
     else {
-        return evalMove(world, player, 15);
+        return evalMove(world, player, 9);
     }
     returnMove = bestMove;
     return max;
