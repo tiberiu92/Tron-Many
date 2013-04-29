@@ -97,22 +97,15 @@ void GameWorld::move(Player p1, Move m1, Player p2, Move m2)
     
     if (!redMoveValid && !greenMoveValid) {
         state_ = DrawState;
-        return;
     }
-
-    if (!redMoveValid) {
+    else if (!redMoveValid) {
         state_ = GreenWonState;
-        return;
     }
-
-    if (!greenMoveValid) {
+    else if (!greenMoveValid) {
         state_ = RedWonState;
-        return;
     }
-    
-    if (redPos_ == greenPos_) {
+    else if (redPos_ == greenPos_) {
         state_ = DrawState;
-        return;
     }
 }
 
