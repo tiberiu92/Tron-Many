@@ -106,36 +106,37 @@ int negaMax (GameWorld& world, GameWorld::Player player, int depth, GameWorld::M
     GameWorld::Player enemy = player == GameWorld::RedPlayer ? GameWorld::GreenPlayer : GameWorld::RedPlayer;
     GameWorld::Position positionPlayer = world.position(player);
     GameWorld::Position positionEnemy = world.position(enemy);
+    GameWorld::State state = world.state();
 
     if (depth == 0) {
-        std::cerr << evalMove(world, player, depth) << "\n";
-        return evalMove(world, player, depth);
+        return evalMove(world, player, 15);
     }
     int max = -INF;
     int score;
     GameWorld::Move bestMove;
 
-    for (GameWorld::Move movePlayer = GameWorld::MovesBegin; movePlayer != GameWorld::MovesEnd; ++movePlayer) {
-        if (!world.moveValid(positionPlayer, movePlayer)) {
-            continue;
-            std::cerr << "Miscare jucator1  invalida \n";
-        }
-        std::cerr << "Iteratie primu for \n";
-       for (GameWorld::Move moveEnemy = GameWorld::MovesBegin; moveEnemy != GameWorld::MovesEnd; ++moveEnemy) {
-            if (!world.moveValid(positionEnemy, moveEnemy)) {
+    if (state == GameWorld::GameRunningState) {
+        for (GameWorld::Move movePlayer = GameWorld::MovesBegin; movePlayer != GameWorld::MovesEnd; ++movePlayer) {
+            if (!world.moveValid(positionPlayer, movePlayer)) {
                 continue;
-                std::cerr << "Miscare jucator2 invalida \n";
             }
-            std::cerr << "Iteratir al doilea for \n";
-            world.move(player, movePlayer, enemy, moveEnemy);
+           for (GameWorld::Move moveEnemy = GameWorld::MovesBegin; moveEnemy != GameWorld::MovesEnd; ++moveEnemy) {
+                if (!world.moveValid(positionEnemy, moveEnemy)) {
+                    continue;
+                }
+                world.move(player, movePlayer, enemy, moveEnemy);
 
-            score = -negaMax(world, player, depth - 1, returnMove);
-            world.undo();
-            if (score > max) {
-                max = score;
-                bestMove = movePlayer;
-            }
-       }
+                score = -negaMax(world, player, depth - 1, returnMove);
+                world.undo();
+                if (score > max) {
+                    max = score;
+                    bestMove = movePlayer;
+                }
+           }
+        }
+    }
+    else {
+        return evalMove(world, player, 15);
     }
     returnMove = bestMove;
     return max;
