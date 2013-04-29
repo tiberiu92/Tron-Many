@@ -22,7 +22,7 @@ ifeq ($(PLATFORM), LINUX)
 endif
 
 build: $(SOURCES)
-	@g++ -o $(OUTPUT) -Wall -enable-auto-import $(SOURCES)
+	@g++ -o $(OUTPUT) -Wall $(SOURCES)
 
 clean:
 	@$(CLEANCMD) $(OUTPUT)
