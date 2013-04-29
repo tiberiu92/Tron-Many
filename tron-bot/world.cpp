@@ -77,7 +77,7 @@ void GameWorld::move(Player p1, Move m1, Player p2, Move m2)
 
     Move redMove = (p1 == RedPlayer) ? m1 : m2;
     Move greenMove = (p2 == GreenPlayer) ? m2 : m1;
-    
+
     bool redMoveValid = moveValid(redPos_, redMove);
     bool greenMoveValid = moveValid(greenPos_, greenMove);
 
