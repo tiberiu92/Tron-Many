@@ -89,11 +89,16 @@ void GameWorld::move(Player p1, Move m1, Player p2, Move m2)
     bool redMoveValid = moveValid(redPos_, redMove);
     bool greenMoveValid = moveValid(greenPos_, greenMove);
 
-    map_[redPos_.first][redPos_.second] = GameWorld::RedSymbol;
-    map_[greenPos_.first][greenPos_.second] = GameWorld::GreenSymbol;
-    
     redPos_ = redPos_ + redMove;
     greenPos_ = greenPos_ + greenMove;
+    
+    // Don't change the map unless both the moves are valid. This makes code
+    // in 'GameWorld::undo' simpler, because there are fewer cases to handle
+    // when restoring map state.
+    if (redMoveValid && greenMoveValid && redPos_ != greenPos_) {
+        map_[redPos_.first][redPos_.second] = GameWorld::RedSymbol;
+        map_[greenPos_.first][greenPos_.second] = GameWorld::GreenSymbol;
+    }
     
     if (!redMoveValid && !greenMoveValid) {
         state_ = DrawState;
@@ -116,8 +121,14 @@ void GameWorld::undo()
     std::pair<Move, Move> top = history_.top();
     history_.pop();
 
-    map_[redPos_.first][redPos_.second] = EmptySymbol;
-    map_[greenPos_.first][greenPos_.second] = EmptySymbol;
+    // 'GameWorld::move' alters the map only if both moves are valid. To see if
+    // the map was altered and needs to be restored, check if the two cells have
+    // the values 'RedSymbol' and 'GreenSymbol'. If not, it means they were not
+    // modified by 'GameWorld::move'.
+    if (cell(redPos_) == RedSymbol && cell(greenPos_) == GreenSymbol) {
+        map_[redPos_.first][redPos_.second] = EmptySymbol;
+        map_[greenPos_.first][greenPos_.second] = EmptySymbol;
+    }
 
     redPos_ = redPos_ - top.first;
     greenPos_ = greenPos_ - top.second;
