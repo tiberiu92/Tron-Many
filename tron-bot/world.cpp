@@ -74,43 +74,33 @@ void GameWorld::move(Player p1, Move m1, Player p2, Move m2)
 {
     assert(p1 != p2);
     assert(state() == GameRunningState);
-
+    
     Move redMove = (p1 == RedPlayer) ? m1 : m2;
     Move greenMove = (p2 == GreenPlayer) ? m2 : m1;
 
+    history_.push(std::make_pair(redMove, greenMove));
+    
     bool redMoveValid = moveValid(redPos_, redMove);
     bool greenMoveValid = moveValid(greenPos_, greenMove);
 
-    if (!redMoveValid && !greenMoveValid) {
-        state_ = DrawState;
-        return;
-    }
-
-    if (!redMoveValid) {
-        state_ = GreenWonState;
-        return;
-    }
-
-    if (!greenMoveValid) {
-        state_ = RedWonState;
-        return;
-    }
-
-    Position newRedPos = redPos_ + redMove;
-    Position newGreenPos = greenPos_ + greenMove;
-
-    if (newRedPos == newGreenPos) {
-        state_ = DrawState;
-        return;
-    }
-
     map_[redPos_.first][redPos_.second] = GameWorld::RedSymbol;
     map_[greenPos_.first][greenPos_.second] = GameWorld::GreenSymbol;
-
-    redPos_ = newRedPos;
-    greenPos_ = newGreenPos;
-
-    history_.push(std::make_pair(redMove, greenMove));
+    
+    redPos_ = redPos_ + redMove;
+    greenPos_ = greenPos_ + greenMove;
+    
+    if (!redMoveValid && !greenMoveValid) {
+        state_ = DrawState;
+    }
+    else if (!redMoveValid) {
+        state_ = GreenWonState;
+    }
+    else if (!greenMoveValid) {
+        state_ = RedWonState;
+    }
+    else if (redPos_ == greenPos_) {
+        state_ = DrawState;
+    }
 }
 
 void GameWorld::undo()
