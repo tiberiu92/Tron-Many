@@ -13,7 +13,7 @@
 
 enum Move {
     Left = 0, Right = 1, Up = 2, Down = 3,
-    MovesBegin = Left, MovesEnd = 4
+    MovesBegin = Left, MovesEnd = 4, MovesSize = 4
 };
 
 class GameWorld
