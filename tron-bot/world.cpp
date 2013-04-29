@@ -1,8 +1,14 @@
+// Matching header
 #include "world.hpp"
+
+// Standard libraries
 #include <cassert>
 #include <iostream>
 #include <stack>
 #include <vector>
+
+// Project headers
+#include "player.hpp"
 
 
 // ============================================================================
@@ -159,13 +165,13 @@ std::istream& operator>>(std::istream& istream, GameWorld::Position& p)
     return istream;
 }
 
-std::istream& operator>>(std::istream& istream, GameWorld::Player& p)
+std::istream& operator>>(std::istream& istream, Player& p)
 {
     char symbol;
     istream >> symbol;
 
-    if (symbol == GameWorld::RedSymbol) p = GameWorld::RedPlayer;
-    else if (symbol == GameWorld::GreenSymbol) p = GameWorld::GreenPlayer;
+    if (symbol == GameWorld::RedSymbol) p = RedPlayer;
+    else if (symbol == GameWorld::GreenSymbol) p = GreenPlayer;
 
     return istream;
 }

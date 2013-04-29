@@ -1,10 +1,15 @@
 #ifndef TRON_MANY_WORLD_HPP
 #define TRON_MANY_WORLD_HPP
 
+// Standard libraries
 #include <iostream>
 #include <stack>
 #include <utility>
 #include <vector>
+
+// Project headers
+#include "player.hpp"
+
 
 enum Move {
     Left = 0, Right = 1, Up = 2, Down = 3,
@@ -60,7 +65,7 @@ GameWorld::Position operator+(const GameWorld::Position& p, Move m);
 GameWorld::Position operator-(const GameWorld::Position& p, Move m);
 
 std::istream& operator>>(std::istream& istream, GameWorld::Position& p);
-std::istream& operator>>(std::istream& istream, GameWorld::Player& p);
+std::istream& operator>>(std::istream& istream, Player& p);
 std::ostream& operator<<(std::ostream& ostream, Move m);
 
 #endif // TRON_MANY_WORLD_HPP
