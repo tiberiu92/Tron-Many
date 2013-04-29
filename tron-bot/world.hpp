@@ -6,17 +6,17 @@
 #include <utility>
 #include <vector>
 
+enum Move {
+    Left = 0, Right = 1, Up = 2, Down = 3,
+    MovesBegin = Left, MovesEnd = 4
+};
+
 class GameWorld
 {
   public:
     typedef char Cell;
     typedef int Coordinate;
     typedef std::pair<Coordinate, Coordinate> Position;
-
-    enum Move {
-        Left = 0, Right = 1, Up = 2, Down = 3,
-        MovesBegin = Left, MovesEnd = 4
-    };
 
     enum Player {
         RedPlayer, GreenPlayer
@@ -54,13 +54,13 @@ class GameWorld
     State state_;
 };
 
-GameWorld::Move operator++(GameWorld::Move& m);
+Move operator++(Move& m);
 
-GameWorld::Position operator+(const GameWorld::Position& p, GameWorld::Move m);
-GameWorld::Position operator-(const GameWorld::Position& p, GameWorld::Move m);
+GameWorld::Position operator+(const GameWorld::Position& p, Move m);
+GameWorld::Position operator-(const GameWorld::Position& p, Move m);
 
 std::istream& operator>>(std::istream& istream, GameWorld::Position& p);
 std::istream& operator>>(std::istream& istream, GameWorld::Player& p);
-std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m);
+std::ostream& operator<<(std::ostream& ostream, Move m);
 
 #endif // TRON_MANY_WORLD_HPP

@@ -1,7 +1,7 @@
 #include "world.hpp"
 #include <cassert>
-#include <stack>
 #include <iostream>
+#include <stack>
 #include <vector>
 
 
@@ -134,20 +134,19 @@ void GameWorld::undo()
 //   Non-member Operators
 // ----------------------------------------------------------------------------
 
-GameWorld::Move operator++(GameWorld::Move& m)
+Move operator++(Move& m)
 {
-    typedef GameWorld::Move Move;
     return m = static_cast<Move>(static_cast<int>(m) + 1);
 }
 
-GameWorld::Position operator+(const GameWorld::Position& p, GameWorld::Move m)
+GameWorld::Position operator+(const GameWorld::Position& p, Move m)
 {
     static const int drow[] = { 0, 0, -1, 1 };
     static const int dcol[] = { -1, 1, 0, 0 };
     return GameWorld::Position(p.first + drow[m], p.second + dcol[m]);
 }
 
-GameWorld::Position operator-(const GameWorld::Position& p, GameWorld::Move m)
+GameWorld::Position operator-(const GameWorld::Position& p, Move m)
 {
     static const int drow[] = { 0, 0, 1, -1 };
     static const int dcol[] = { 1, -1, 0, 0 };
@@ -171,7 +170,7 @@ std::istream& operator>>(std::istream& istream, GameWorld::Player& p)
     return istream;
 }
 
-std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
+std::ostream& operator<<(std::ostream& ostream, Move m)
 {
     static const char* moves[] = { "LEFT", "RIGHT", "UP", "DOWN" };
     return ostream << moves[m];
