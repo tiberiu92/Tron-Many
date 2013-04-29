@@ -23,10 +23,6 @@ class GameWorld
     typedef int Coordinate;
     typedef std::pair<Coordinate, Coordinate> Position;
 
-    enum Player {
-        RedPlayer, GreenPlayer
-    };
-
     enum State {
         GameRunningState, RedWonState, GreenWonState, DrawState
     };
