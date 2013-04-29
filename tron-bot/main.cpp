@@ -1,6 +1,5 @@
 // Standard headers
 #include <algorithm>
-#include <cmath>
 #include <iostream>
 #include <vector>
 
@@ -32,7 +31,7 @@ void getProximalArea(const GameWorld& world, const GameWorld::Position& pos,
 double getAreaSpread(const std::vector<GameWorld::Position>& area,
     GameWorld::Coordinate GameWorld::Position::*coord)
 {
-    double deviation = 0.0, average = 0.0;
+    double variance = 0.0, average = 0.0;
     std::vector<GameWorld::Position>::const_iterator cell;
 
     for (cell = area.begin(); cell != area.end(); ++cell) {
@@ -43,12 +42,12 @@ double getAreaSpread(const std::vector<GameWorld::Position>& area,
 
     for (cell = area.begin(); cell != area.end(); ++cell) {
         double temp = (*cell).*coord - average;
-        deviation += temp * temp;
+        variance += temp * temp;
     }
 
-    deviation = std::sqrt(deviation / area.size());
-
-    return deviation;
+    variance /= area.size();
+    
+    return variance;
 }
 
 double evaluateBoard(const GameWorld& world, Player player)
