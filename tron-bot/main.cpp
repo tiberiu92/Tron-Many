@@ -4,8 +4,10 @@
 #include <vector>
 
 // Project headers
+#include "pathfinding.hpp"
 #include "player.hpp"
 #include "world.hpp"
+
 
 void getProximalArea(const GameWorld& world, const GameWorld::Position& pos,
     int depth, std::vector<GameWorld::Position>& area)
@@ -27,6 +29,7 @@ void getProximalArea(const GameWorld& world, const GameWorld::Position& pos,
         getProximalArea(world, pos2, depth - 1, area);
     }
 }
+
 
 double getAreaSpread(const std::vector<GameWorld::Position>& area,
     GameWorld::Coordinate GameWorld::Position::*coord)
@@ -50,6 +53,7 @@ double getAreaSpread(const std::vector<GameWorld::Position>& area,
     return variance;
 }
 
+
 double evaluateBoard(const GameWorld& world, Player player)
 {    
     std::vector<GameWorld::Position> area;
@@ -69,10 +73,11 @@ double evaluateBoard(const GameWorld& world, Player player)
     return playerSpread - enemySpread;
 }
 
+
 double nash(GameWorld& world, Player player, int depth, Move& returnMove)
 {
     Player enemy = otherPlayer(player);
-    Move dummy = Left; // Doesn't matter
+    Move dummy = Left; // Prevents "dummy is uninitialized" warnings
 
     GameWorld::Position playerPos = world.position(player);
     GameWorld::Position enemyPos = world.position(enemy);
@@ -122,6 +127,23 @@ double nash(GameWorld& world, Player player, int depth, Move& returnMove)
     return worstScore;
 }
 
+
+Move nextMove(GameWorld& world, Player player, int depth)
+{
+    GameWorld::Position playerPos = world.position(player);
+    GameWorld::Position enemyPos = world.position(otherPlayer(player));
+    
+    Move move = Left;
+    int distance = aStar(world, playerPos, enemyPos, manhattanDistance, move);
+    
+    if (move == MovesEnd || distance <= depth) {
+        nash(world, player, depth, move);
+    }
+    
+    return move;
+}
+
+
 int main()
 {
     Player player;
@@ -130,8 +152,8 @@ int main()
     std::cin >> player;
     GameWorld world(std::cin);
 
-    nash(world, player, 4, move);
+    move = nextMove(world, player, 4);
     std::cout << move << "\n";
-
+    
     return 0;
 }
