@@ -7,6 +7,38 @@ Scarlat Tiberiu (323CB), Velea Cosmin (323CB)
 **HackerRank:** [hackerrank.com/ShiftDelete][1]  
 **Gmail:** tron.shift.delete@gmail.com
 
+###Etapa II###
+
+Tag: `stage-ii-submission`
+
+Pentru aceasta etapa am implementat un algoritm ce foloseste echilibrul 
+Nash pentru a gasi mutarea care minimizeaza sansele de a pierde meciul. 
+Pentru a evalua starea hartii (si a decide care jucator este in avantaj), 
+am aproximat cat de raspandita este zona accesibila fiecarui jucator 
+in urmatorul fel (pseudocod):
+
+    area       := getProximalArea(player) 
+    rowSpread  := rowVariance(area)
+    colSpread  := colVariance(area)
+    areaSpread := rowSpread * colSpread  
+
+Functiile `rowVariance` si `colVariance` calculeaza  varianta (din 
+statistica) a sufrafetei date, dupa cele doua axe. Daca  toate celulele 
+se afla pe o singura linie sau coloana, atunci `rowSpread`, respectiv 
+`colSpread`, va fi zero deci si produsul celor doua va fi zero.
+
+Algoritmul ce foloseste echilibrul Nash cauta cu o adancime foarte mica 
+(din motive de eficienta), ceea ce inseamna ca nu va avea o performanta 
+foarte buna cand jucatorul este prea departe. Pentru a combate asta, am 
+implementat si algoritmul A\*, pentru a ne putea apropria de adversar 
+cand suntem prea departe. Euristica folosita impreuna cu A\* este 
+distanta Manhattan.
+
+**Solutie:** [hackerrank.com/.../submissions/game/635151][35]  
+**Meciuri stage2bot:** [a][36] - [b][37] - [c][38] - [d][39] - [e][40] - 
+[f][41] - [g][42] - [h][43] - [i][44] - [j][45] - [k][46] - [l][47] - 
+[m][48] - [n][49] - [o][50] - [p][51]  
+
 
 ###Etapa I###
 
@@ -69,3 +101,20 @@ recente pe care le avem pe repository-ul de pe GitHub.
  [32]: https://www.hackerrank.com/showgame/2134140
  [33]: https://www.hackerrank.com/showgame/2134143
  [34]: https://www.hackerrank.com/showgame/2134145
+ [35]: https://www.hackerrank.com/contests/bucharest-tron/submissions/game/635151
+ [36]: https://www.hackerrank.com/showgame/2301194
+ [37]: https://www.hackerrank.com/showgame/2301195
+ [38]: https://www.hackerrank.com/showgame/2301196
+ [39]: https://www.hackerrank.com/showgame/2301197
+ [40]: https://www.hackerrank.com/showgame/2301198
+ [41]: https://www.hackerrank.com/showgame/2301199
+ [42]: https://www.hackerrank.com/showgame/2301200
+ [43]: https://www.hackerrank.com/showgame/2301201
+ [44]: https://www.hackerrank.com/showgame/2301202
+ [45]: https://www.hackerrank.com/showgame/2301203
+ [46]: https://www.hackerrank.com/showgame/2301204
+ [47]: https://www.hackerrank.com/showgame/2301205
+ [48]: https://www.hackerrank.com/showgame/2301206
+ [49]: https://www.hackerrank.com/showgame/2301207
+ [50]: https://www.hackerrank.com/showgame/2301208
+ [51]: https://www.hackerrank.com/showgame/2301209
