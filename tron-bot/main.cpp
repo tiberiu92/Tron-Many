@@ -59,13 +59,15 @@ double evaluateBoard(const GameWorld& world, Player player)
     std::vector<GameWorld::Position> area;
     double playerSpread, enemySpread;
     
-    getProximalArea(world, world.position(player), 10, area);
+    int depth = 15; 
+    
+    getProximalArea(world, world.position(player), depth, area);
     double rowSpread = getAreaSpread(area, &GameWorld::Position::first);
     double colSpread = getAreaSpread(area, &GameWorld::Position::second);
     playerSpread = rowSpread * colSpread;
     
     area.clear();
-    getProximalArea(world, world.position(otherPlayer(player)), 15, area);
+    getProximalArea(world, world.position(otherPlayer(player)), depth, area);
     rowSpread = getAreaSpread(area, &GameWorld::Position::first);
     colSpread = getAreaSpread(area, &GameWorld::Position::second);
     enemySpread = rowSpread * colSpread;
