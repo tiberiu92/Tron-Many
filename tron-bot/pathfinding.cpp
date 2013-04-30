@@ -112,14 +112,15 @@ int aStar(const GameWorld& world, const Position& start, const Position& end,
         
         for (Move move = MovesBegin; move != MovesEnd; ++move)
         {
-            if (!world.moveValid(cell, move))
+            if (cell + move != end && !world.moveValid(cell, move))
                 continue;
             
             int newGValue = gValues[cell] + 1;
             Position child = cell + move;
             
-            if (newGValue >= gValues[child])
+            if (newGValue >= gValues[child]) {
                 continue;
+            }
             
             from[child] = move;
             gValues[child] = newGValue;

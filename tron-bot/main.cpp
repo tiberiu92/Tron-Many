@@ -151,7 +151,7 @@ int main()
 
     std::cin >> player;
     GameWorld world(std::cin);
-
+    
     move = nextMove(world, player, 4);
     std::cout << move << "\n";
     
