@@ -9,6 +9,8 @@ Scarlat Tiberiu (323CB), Velea Cosmin (323CB)
 
 ###Etapa II###
 
+Tag: `stage-ii-submission`
+
 Pentru aceasta etapa am implementat un algoritm ce foloseste echilibrul 
 Nash pentru a gasi mutarea care minimizeaza sansele de a pierde meciul. 
 Pentru a evalua starea hartii (si a decide care jucator este in avantaj), 
