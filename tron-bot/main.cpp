@@ -78,7 +78,6 @@ double nash(GameWorld& world, Player player, int depth, Move& returnMove)
     GameWorld::Position enemyPos = world.position(enemy);
 
     double winScore = 999.0, lossScore = -999.0, drawScore = -400.0;
-    double scores[MovesSize][MovesSize];
     double worstScore = lossScore;
 
     for (Move pMove = MovesBegin; pMove != MovesEnd; ++pMove)
@@ -87,6 +86,7 @@ double nash(GameWorld& world, Player player, int depth, Move& returnMove)
             continue;
             
         double bestScore = winScore;
+        double curScore;
     
         for (Move eMove = MovesBegin; eMove != MovesEnd; ++eMove)
         {
@@ -96,20 +96,20 @@ double nash(GameWorld& world, Player player, int depth, Move& returnMove)
             world.move(player, pMove, enemy, eMove);
 
             if (isWinner(world, player))
-                scores[pMove][eMove] = winScore;
+                curScore = winScore;
             else if (isWinner(world, enemy))
-                scores[pMove][eMove] = lossScore;
+                curScore = lossScore;
             else if (world.state() == GameWorld::DrawState)
-                scores[pMove][eMove] = drawScore;
+                curScore = drawScore;
             else if (depth > 1)
-                scores[pMove][eMove] = nash(world, player, depth - 1, dummy);
+                curScore = nash(world, player, depth - 1, dummy);
             else
-                scores[pMove][eMove] = evaluateBoard(world, player);
+                curScore = evaluateBoard(world, player);
 
             world.undo();
             
-            if (scores[pMove][eMove] < bestScore) {
-                bestScore = scores[pMove][eMove];
+            if (curScore < bestScore) {
+                bestScore = curScore;
             }
         }
 
