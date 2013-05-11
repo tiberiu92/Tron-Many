@@ -16,8 +16,7 @@ void getProximalArea(const GameWorld& world, const GameWorld::Position& pos,
 
     area.push_back(pos);
 
-    for (GameWorld::Move move = GameWorld::MovesBegin;
-         move != GameWorld::MovesEnd; ++move)
+    for (Move move = MovesBegin; move != MovesEnd; ++move)
     {
         if (!world.moveValid(pos, move))
             continue;
@@ -53,9 +52,7 @@ int numNeighbours(const GameWorld& world, const GameWorld::Position& pos)
 {
     int count = 0;
 
-    for (GameWorld::Move move = GameWorld::MovesBegin;
-         move != GameWorld::MovesEnd; ++move)
-    {
+    for (Move move = MovesBegin; move != MovesEnd; ++move) {
         if (world.moveValid(pos, move))
             ++count;
     }
@@ -63,20 +60,10 @@ int numNeighbours(const GameWorld& world, const GameWorld::Position& pos)
     return count;
 }
 
-bool isWinner(const GameWorld& world, GameWorld::Player player) {
-    GameWorld::State state = world.state();
-    if (player == GameWorld::RedPlayer && state == GameWorld::RedWonState) {
-        return true;
-    }
-    if (player == GameWorld::GreenPlayer && state == GameWorld::GreenWonState) {
-        return true;
-    }
-    return false;
-}
-
-int evalMove (GameWorld& world, GameWorld::Player player, int depth) {
+int evalMove (GameWorld& world, Player player, int depth)
+{
         GameWorld::State state = world.state();
-        GameWorld::Player enemy = player == GameWorld::RedPlayer ? GameWorld::GreenPlayer : GameWorld::RedPlayer;
+        Player enemy = otherPlayer(player);
 
         std::size_t playerArea, enemyArea;
         std::vector<GameWorld::Position> area;
@@ -101,9 +88,9 @@ int evalMove (GameWorld& world, GameWorld::Player player, int depth) {
 
 }
 
-int negaMax (GameWorld& world, GameWorld::Player player, int depth, GameWorld::Move& returnMove) {
-
-    GameWorld::Player enemy = player == GameWorld::RedPlayer ? GameWorld::GreenPlayer : GameWorld::RedPlayer;
+int negaMax (GameWorld& world, Player player, int depth, Move& returnMove)
+{
+    Player enemy = otherPlayer(player);
     GameWorld::Position positionPlayer = world.position(player);
     GameWorld::Position positionEnemy = world.position(enemy);
     GameWorld::State state = world.state();
@@ -113,26 +100,28 @@ int negaMax (GameWorld& world, GameWorld::Player player, int depth, GameWorld::M
     }
     int max = -INF;
     int score;
-    GameWorld::Move bestMove;
+    Move bestMove;
 
     if (state == GameWorld::GameRunningState) {
-        for (GameWorld::Move movePlayer = GameWorld::MovesBegin; movePlayer != GameWorld::MovesEnd; ++movePlayer) {
+        for (Move movePlayer = MovesBegin; movePlayer != MovesEnd; ++movePlayer)
+        {
             if (!world.moveValid(positionPlayer, movePlayer)) {
                 continue;
             }
-           for (GameWorld::Move moveEnemy = GameWorld::MovesBegin; moveEnemy != GameWorld::MovesEnd; ++moveEnemy) {
+            for (Move moveEnemy = MovesBegin; moveEnemy != MovesEnd; ++moveEnemy)
+            {
                 if (!world.moveValid(positionEnemy, moveEnemy)) {
                     continue;
                 }
                 world.move(player, movePlayer, enemy, moveEnemy);
-
                 score = -negaMax(world, player, depth - 1, returnMove);
                 world.undo();
+                
                 if (score > max) {
                     max = score;
                     bestMove = movePlayer;
                 }
-           }
+            }
         }
     }
     else {
@@ -145,17 +134,13 @@ int negaMax (GameWorld& world, GameWorld::Player player, int depth, GameWorld::M
 int main()
 {
 
-    GameWorld::Player player;
+    Player player;
     std::cin >> player;
     GameWorld world (std::cin);
 
-    GameWorld::Move bestMove;
-
+    Move bestMove = Left;
     negaMax(world, player, 5, bestMove);
 
     std::cout << bestMove << '\n';
-
-
-
     return 0;
 }

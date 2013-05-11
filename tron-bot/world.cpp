@@ -1,8 +1,14 @@
+// Matching header
 #include "world.hpp"
+
+// Standard libraries
 #include <cassert>
-#include <stack>
 #include <iostream>
+#include <stack>
 #include <vector>
+
+// Project headers
+#include "player.hpp"
 
 
 // ============================================================================
@@ -135,20 +141,19 @@ void GameWorld::undo()
 //   Non-member Operators
 // ----------------------------------------------------------------------------
 
-GameWorld::Move operator++(GameWorld::Move& m)
+Move operator++(Move& m)
 {
-    typedef GameWorld::Move Move;
     return m = static_cast<Move>(static_cast<int>(m) + 1);
 }
 
-GameWorld::Position operator+(const GameWorld::Position& p, GameWorld::Move m)
+GameWorld::Position operator+(const GameWorld::Position& p, Move m)
 {
     static const int drow[] = { 0, 0, -1, 1 };
     static const int dcol[] = { -1, 1, 0, 0 };
     return GameWorld::Position(p.first + drow[m], p.second + dcol[m]);
 }
 
-GameWorld::Position operator-(const GameWorld::Position& p, GameWorld::Move m)
+GameWorld::Position operator-(const GameWorld::Position& p, Move m)
 {
     static const int drow[] = { 0, 0, 1, -1 };
     static const int dcol[] = { 1, -1, 0, 0 };
@@ -161,18 +166,18 @@ std::istream& operator>>(std::istream& istream, GameWorld::Position& p)
     return istream;
 }
 
-std::istream& operator>>(std::istream& istream, GameWorld::Player& p)
+std::istream& operator>>(std::istream& istream, Player& p)
 {
     char symbol;
     istream >> symbol;
 
-    if (symbol == GameWorld::RedSymbol) p = GameWorld::RedPlayer;
-    else if (symbol == GameWorld::GreenSymbol) p = GameWorld::GreenPlayer;
+    if (symbol == GameWorld::RedSymbol) p = RedPlayer;
+    else if (symbol == GameWorld::GreenSymbol) p = GreenPlayer;
 
     return istream;
 }
 
-std::ostream& operator<<(std::ostream& ostream, GameWorld::Move m)
+std::ostream& operator<<(std::ostream& ostream, Move m)
 {
     static const char* moves[] = { "LEFT", "RIGHT", "UP", "DOWN" };
     return ostream << moves[m];
