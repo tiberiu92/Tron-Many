@@ -22,8 +22,8 @@ in urmatorul fel (pseudocod):
     colSpread  := colVariance(area)
     areaSpread := rowSpread * colSpread  
 
-Functiile `rowVariance` si `colVariance` calculeaza  varianta (din 
-statistica) a sufrafetei date, dupa cele doua axe. Daca  toate celulele 
+Functiile `rowVariance` si `colVariance` calculeaza  varianta sufrafetei 
+date (din statistica), dupa cele doua axe. Daca  toate celulele 
 se afla pe o singura linie sau coloana, atunci `rowSpread`, respectiv 
 `colSpread`, va fi zero deci si produsul celor doua va fi zero.
 
